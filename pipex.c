@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/22 02:31:27 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/22 14:58:00 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ char	**whereis_paths(t_data *arg)
 }
 
 //PATH contient une liste de répertoires où le système recherche les exécutables
+//access()vérifie si le programme peut accéder au fichier pathname
 
 char	*add_slash_to_path(t_data *arg)
 {
@@ -86,23 +87,23 @@ void	process_child1(int *fd, char *av[], char *env[])
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
 	{
-		perror("ERROR OPENING INPUT FILE lors de l'ouverture de linputfile\n");
-		process_child2(arg, av, env);
+		perror("ERROR OPENING INPUT FILE\n");
+		process_child2(arg, av, env);//cat | ls
 	}
 	//redirection de l'entrée strandard
 	if (dup2(arg->input_file, STDIN_FILENO) == -1)
 	{
 		perror("ERROR IN REDIRECTION VERS STDIN\n");
 		close(arg->input_file);
-		process_child2(arg, av, env);
+		process_child2(arg, av, env);//n exit
 	}
 	close(arg->input_file);//fermer le fichier d entrée apres redirection
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
 		perror("ERROR IN REDIRECTION VERS STDOUT");
-		process_child2(arg, av, env);
+		process_child2(arg, av, env);//n exit
 	}
-	execve(av[2], &av[2], env);//executer la cmd1
+	// execve(av[2], &av[2], env);//executer la cmd1
 	perror("ERREUR LORS DE L'EXECUTION DE LA 1ERE CMD");
 	process_child2(arg, av, env);
 }
