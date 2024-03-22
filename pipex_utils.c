@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:57:04 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/17 22:00:55 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/20 22:56:15 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,24 @@ char	**ft_split(const char *s, char c)
 		r++;
 	}
 	res[wc] = NULL;
-	free((char *)s);
+	// free((char *)s);
 	return (res);
 }
+
+
+void	errors(char	*str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		write(2, &str[i], 1);
+		i++;
+	}
+	exit(EXIT_FAILURE);
+}
+
 // void	check_env(t_data *data)
 // {
 // 	if (data->path == NULL)

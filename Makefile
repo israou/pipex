@@ -6,7 +6,7 @@
 #    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/03/18 02:29:34 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/03/20 02:52:45 by ichaabi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = pipex
 
 NAME_B = pipex_bonus
 
-CC = CC
+CC = cc
 
 CFLAGS = -Wall -Wextra -Werror
 

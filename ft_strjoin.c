@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 00:48:46 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/18 15:33:02 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/20 02:53:38 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,3 +48,20 @@ char	*ft_strjoin(char *s1, char *s2)
 	str[i + j] = '\0';
 	return (str);
 }
+// char	*ft_strchr(const char *s, int c)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (s[i])
+// 	{
+// 		if (s[i] == (unsigned char)c)
+// 		{
+// 			return ((char *) s + i);
+// 		}
+// 		i++;
+// 	}
+// 	if (s[i] == (unsigned char)c)
+// 		return ((char *) s + i);
+// 	return (NULL);
+// }
