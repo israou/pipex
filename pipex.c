@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/22 14:58:00 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/23 22:15:56 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ char	*add_slash_to_path(t_data *arg)
 		{
 			cmd_w_slash = ft_strjoin(tmp, arg->cmd_p);
 			free(tmp);
-			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)
+			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)//hyedt x_ok nshouf ghir wsh kayn
 			return (cmd_w_slash);
-		// free(cmd_w_slash);
+			free(cmd_w_slash);
 		}
 		i++;
 	}
@@ -79,38 +79,40 @@ char	*add_slash_to_path(t_data *arg)
 // représentant le chemin complet de la commande "ls" située dans le répertoire "/usr/bin"
 
 
-void	process_child1(int *fd, char *av[], char *env[])
+void	process_child1(int *fd, char *av[])
 {
-	t_data	*arg;
+	t_data	*arg = NULL;
 
 	close(fd[0]);//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
 	{
 		perror("ERROR OPENING INPUT FILE\n");
-		process_child2(arg, av, env);//cat | ls
+		process_child2(arg->fd, av);//cat | ls//exit
 	}
-	//redirection de l'entrée strandard
 	if (dup2(arg->input_file, STDIN_FILENO) == -1)
 	{
 		perror("ERROR IN REDIRECTION VERS STDIN\n");
 		close(arg->input_file);
-		process_child2(arg, av, env);//n exit
+		process_child2(arg->fd, av);//n exit
 	}
 	close(arg->input_file);//fermer le fichier d entrée apres redirection
-	if (dup2(fd[1], STDOUT_FILENO) == -1)
+	if (dup2(fd[1], STDOUT_FILENO) == -1)//hit l output likikhrej khass ndewzo lpipe bash tqrah lcommande lakhra
 	{
 		perror("ERROR IN REDIRECTION VERS STDOUT");
-		process_child2(arg, av, env);//n exit
+		close(fd[1]);
+		process_child2(arg->fd, av);//n exit
 	}
+	close(fd[1]);
+	execute_command(arg);
 	// execve(av[2], &av[2], env);//executer la cmd1
 	perror("ERREUR LORS DE L'EXECUTION DE LA 1ERE CMD");
-	process_child2(arg, av, env);
+	process_child2(arg->fd, av);
 }
 
-void	process_child2(int *fd, char *av[], char *env[])
+void	process_child2(int *fd, char *av[])
 {
-	t_data	*arg;
+	t_data	*arg = NULL;
 
 	close(fd[1]);//fermer le fd stoutput,, il n ecrira pas dans |
 	arg->output_file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);//O_TRUNC vide le fichier avant son ouverture
@@ -126,62 +128,28 @@ void	process_child2(int *fd, char *av[], char *env[])
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
 		errors("ERROR IN REDIRECTION VERS STDIN");
+		close(fd[0]);
 	}
-	execve(av[3], &av[3], env);
+	close(fd[0]);
+	execute_command(arg);
+	// //path dial av[3]
+	// execve(av[3], &av[3], env);
 	errors("ERREUR LORS DE L'EXECUTION DE LA CMD2");
 }
-
-int main()
+void	execute_command(t_data *arg)
 {
-	pid_t pid;
-
-    printf("Fork ici.\n");
-    pid = fork();
-    if (pid == -1)
-    {
-        // Si fork renvoie -1, il y a eu une erreur !
-        return (1);
-    }
-    printf("\nFork reussi !\n");
-    if (pid == 0)
-    {
-        // La valeur de retour de fork
-        // est 0, ce qui veut dire qu'on est
-        // dans le processus fils
-        printf("Fils : Je suis le fils, mon pid interne est %d.\n", pid);
-    }
-    else if (pid > 0)
-    {
-        // La valeur de retour de fork
-        // est différente de 0, ce qui veut dire
-        // qu'on est dans le processus père
-        printf("Pere : Je suis le pere, le pid de mon fils est %d.\n", pid);
-    }
-    return(0);
+	if (ft_strchr(arg->cmd, '/'))
+	{
+		if (access(arg->cmd, F_OK) == 0)
+			return ;
+		errors("cmd not found\n");
+	}
+	arg->cmd = add_slash_to_path(arg);
+	if (!arg->cmd)
+		errors("eerroorr\n");
+	execve(arg->cmd_p, &(arg->cmd), arg->env);
+	errors("ERROR EXECUTING COMMAND");
 }
-// int main(int ac, char **av, char **env) {
-//     // char *cmd_path;
-//     // char *options[3] = {"ls", "-la", NULL};
-// 	// t_data arg;
-// 	// arg.cmd = "ls";
-
-//     // (void)ac;
-//     // (void)av;
-
-// 	// arg.env = env;
-// 	// cmd_path = NULL;
-
-// 	// arg.path = whereis_paths(&arg);
-// 	// if (arg.path)
-// 	// 	add_slash_to_path(&arg);
-
-
-//     // execve(cmd_path, options, env);
-//     // perror("Error in execve!\n");
-//     // free(cmd_path);
-//     // return(0);
-// }
-
 //exemples
 // step 1:
 // 	PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -202,30 +170,37 @@ int main()
 // 	return (0);
 // }
 
-// int main(int ac, char **av, char **env)
-// {
-// 	int	i;
+int main(int ac, char **av)
+{
+	t_data	*arg;
+	pid_t	pid1;
+	pid_t	pid2;
+	int		fd[2];
 
-// 	i = 0;
-// 	if (ac == 5)
-// 	{
-
-// 	}
-// 	else
-// 		perror("FAILURE");
-// 	exit(EXIT_FAILURE);
-// }
-
-// char	**parsing(char **av)
-// {
-// 	int	i;
-// 	char	**splitted_args;
-
-// 	i = 0;
-// 	splitted_args = ft_split(av, ' ');
-// 	if (splitted_args == NULL)
-// 		perror("Error\nSPLITTED_ARGS");
-// 		exit(EXIT_FAILURE);
-// 	return (splitted_args);
-// }
+	arg = NULL;
+	if (ac == 5)
+	{
+		if (pipe(fd) == -1)
+			errors("pipe failat");
+		pid1 = fork();
+		if (pid1 == -1)
+			errors("");
+		if (pid1 == 0)
+			process_child1(arg->fd, av);
+		pid2 = fork();
+		if (pid2 == -1)
+			errors("");
+		if (pid2 == 0)
+			process_child2(arg->fd, av);
+		wait(NULL);
+		wait(NULL);
+		close(fd[0]);
+		close(fd[1]);
+	}
+	else
+	{
+		perror("FAILURE\n");
+		exit(EXIT_FAILURE);
+	}
+}
 

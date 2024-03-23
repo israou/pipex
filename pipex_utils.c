@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:57:04 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/20 22:56:15 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/22 23:01:25 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,3 +138,21 @@ void	errors(char	*str)
 // 		perror("Error\n ENV");
 // 		exit(EXIT_FAILURE);
 // }
+
+char	*ft_strchr(const char *s, int c)
+{
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == (unsigned char)c)
+		{
+			return ((char *) s + i);
+		}
+		i++;
+	}
+	if (s[i] == (unsigned char)c)
+		return ((char *) s + i);
+	return (NULL);
+}
