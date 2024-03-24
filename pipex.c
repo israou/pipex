@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/24 02:46:40 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/24 02:49:40 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	process_child2(int *fd, char *av[])
 {
 	t_data	*arg;
 
+	arg->cmd = ft_split(av[2], ' ');
+	arg->cmd = ft_split(av[3], ' ');
 	close(fd[1]);//fermer le fd stoutput,, il n ecrira pas dans |
 	arg->output_file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);//O_TRUNC vide le fichier avant son ouverture
 	if (arg->output_file == -1)
@@ -163,7 +165,7 @@ int main(int ac, char **av, char **env)
 	t_data *arg;
 
 	arg->env = env;
-	
+
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (arg == NULL)
 		errors("ARG ALLOCATION\n");
