@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/24 02:33:58 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/24 15:47:57 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,8 @@ char	**whereis_paths(t_data *data);
 char	*add_slash_to_path(t_data *arg);
 void	free_path(t_data *arg);
 void	free_cmd(t_data *arg);
-void	process_child1(int *fd, char *av[]);
-void	process_child2(int *fd, char *av[]);
+void	process_child1(t_data *arg, int *fd, char *av[]);
+void	process_child2(t_data *arg, int *fd, char *av[]);
 char	*ft_strchr(const char *s, int c);
 void	execute_command(t_data *arg);
 void	errors(char	*str);

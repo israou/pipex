@@ -6,7 +6,7 @@
 #    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/03/24 02:23:12 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/03/24 15:49:49 by ichaabi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,7 @@ OBJB = $(SRC_B:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -g -fsanitize=address -o $(NAME)
+	$(CC) $(OBJ) -o $(NAME)
 
 bonus: $(OBJB)
 		$(CC) $(OBJB) -o $(NAME_B)
