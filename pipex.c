@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/24 02:04:32 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/24 02:46:40 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ char	**whereis_paths(t_data *arg)
 	int		i;//parcourt la variable env,, puis les chemins extraits de paths
 
 	i = 0;
+
 	while (arg->env[i])
 	{
 		if (ft_strncmp(arg->env[i], "PATH", 4) == 0)
@@ -81,8 +82,10 @@ char	*add_slash_to_path(t_data *arg)
 
 void	process_child1(int *fd, char *av[])
 {
-	t_data *arg = NULL;
+	t_data	*arg;
 
+	arg->cmd = ft_split(av[2], ' ');
+	arg->cmd = ft_split(av[3], ' ');
 	close(fd[0]);//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
@@ -113,7 +116,7 @@ void	process_child1(int *fd, char *av[])
 
 void	process_child2(int *fd, char *av[])
 {
-	t_data	*arg = NULL;
+	t_data	*arg;
 
 	close(fd[1]);//fermer le fd stoutput,, il n ecrira pas dans |
 	arg->output_file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);//O_TRUNC vide le fichier avant son ouverture
@@ -152,12 +155,18 @@ void	execute_command(t_data *arg)
 	errors("ERROR EXECUTING COMMAND");
 }
 
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
 	pid_t	pid1;
 	pid_t	pid2;
 	int		fd[2];
+	t_data *arg;
 
+	arg->env = env;
+	
+	arg = (t_data *)malloc(sizeof(t_data));
+	if (arg == NULL)
+		errors("ARG ALLOCATION\n");
 	if (ac == 5)
 	{
 		if (pipe(fd) == -1)
@@ -166,7 +175,6 @@ int main(int ac, char **av)
 		if (pid1 == -1)
 			errors("ERREUR LORS DE LA CREATION DU PROCESSUS CHILD 1\n");
 		if (pid1 == 0)
-			puts("hona\n");
 			process_child1(fd, av);
 		pid2 = fork();
 		if (pid2 == -1)
