@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 03:42:45 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 17:09:22 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,12 +140,12 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 }
 void	execute_command(t_data *arg)
 {
-	// if (ft_strchr(arg->cmd, '/'))
-	// {
-	// 	if (access(arg->cmd, F_OK) == 0)
-	// 		return ;
-	// 	errors("cmd not found\n");
-	// }
+	if (ft_strchr(arg->cmd, '/'))
+	{
+		if (access(arg->cmd, F_OK) == 0)
+			return ;
+		errors("cmd not found\n");
+	}
 	arg->cmd = add_slash_to_path(arg);
 	if (!arg->cmd)
 		errors("eerroorr\n");
@@ -199,10 +199,10 @@ int main(int ac, char **av, char **env)
 		if (pid2 == 0)
 			process_child2(arg, fd, av);
 
-		wait(NULL);
-		wait(NULL);
 		close(fd[0]);
 		close(fd[1]);
+		wait(NULL);
+		wait(NULL);
 	}
 	else
 	{

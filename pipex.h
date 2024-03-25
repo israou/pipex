@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 02:58:30 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 17:08:19 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ typedef struct s_data
 	char	*cmd_p;
 	int		input_file;
 	int		output_file;
-	// int		*fd;
 	char	*cmd_w_slash;
 }			t_data;
 
