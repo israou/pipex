@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/24 15:47:57 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 02:17:56 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ typedef struct s_data
 	char	**env;
 	char	**content;
 	char	*cmd;
+	char	*cmd2;
 	char	*cmd_p;
 	int		input_file;
 	int		output_file;
@@ -47,6 +48,7 @@ void	process_child2(t_data *arg, int *fd, char *av[]);
 char	*ft_strchr(const char *s, int c);
 void	execute_command(t_data *arg);
 void	errors(char	*str);
+void	execute_command_two(t_data *arg);
 // char	*check_env(t_data *data);
 
 

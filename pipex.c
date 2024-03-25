@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/24 16:52:46 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 02:22:51 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,14 @@ char	*add_slash_to_path(t_data *arg)
 
 	i = 0;
 	cmd_w_slash = NULL;
-	whereis_paths(arg);
+	arg->path = whereis_paths(arg);
 	while (arg->path[i])
 	{
 		tmp = ft_strjoin(arg->path[i], "/");
 		if (tmp)
 		{
 			cmd_w_slash = ft_strjoin(tmp, arg->cmd_p);
+			// printf(2, "%s\n", cmd_w_slash);
 			free(tmp);
 			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)//hyedt x_ok nshouf ghir wsh kayn
 				return (cmd_w_slash);
@@ -131,7 +132,8 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 		close(fd[0]);
 	}
 	close(fd[0]);
-	execute_command(arg);
+	// dprintf(2, "fdfddfd\n");
+	execute_command_two(arg);
 	// //path dial av[3]
 	// execve(av[3], &av[3], env);
 	errors("ERREUR LORS DE L'EXECUTION DE LA CMD2");
@@ -147,8 +149,25 @@ void	execute_command(t_data *arg)
 	arg->cmd = add_slash_to_path(arg);
 	if (!arg->cmd)
 		errors("eerroorr\n");
-	execve(arg->cmd_p, &(arg->cmd), arg->env);
-	errors("ERROR EXECUTING COMMAND");
+	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
+	execve(arg->cmd_p, arg->content, arg->env);
+	errors("ERROR EXECUTING COMMAND 1\n");
+}
+
+void	execute_command_two(t_data *arg)
+{
+	if (ft_strchr(arg->cmd, '/'))
+	{
+		if (access(arg->cmd, F_OK) == 0)
+			return ;
+		errors("cmd not found\n");
+	}
+	arg->cmd2  = add_slash_to_path(arg);
+	if (!arg->cmd2)
+		errors("eerroorr\n");
+	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
+	execve(arg->cmd_p, arg->content, arg->env);
+	errors("ERROR EXECUTING COMMAND 2\n");
 }
 
 int main(int ac, char **av, char **env)
@@ -163,6 +182,9 @@ int main(int ac, char **av, char **env)
 	if (arg == NULL)
 		errors("ARG ALLOCATION\n");
 	arg->env = env;
+	arg->cmd_p = av[2];
+	arg->cmd = av[2];
+
 	if (ac == 5)
 	{
 		if (pipe(fd) == -1)
