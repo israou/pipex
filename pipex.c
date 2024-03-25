@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 02:22:51 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 02:34:15 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ void	execute_command(t_data *arg)
 	if (!arg->cmd)
 		errors("eerroorr\n");
 	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
-	execve(arg->cmd_p, arg->content, arg->env);
+	execve(arg->cmd, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 1\n");
 }
 
@@ -166,7 +166,7 @@ void	execute_command_two(t_data *arg)
 	if (!arg->cmd2)
 		errors("eerroorr\n");
 	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
-	execve(arg->cmd_p, arg->content, arg->env);
+	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
 
