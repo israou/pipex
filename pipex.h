@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 17:08:19 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 22:03:18 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ typedef struct s_data
 	char	**content;
 	char	*cmd;
 	char	*cmd2;
-	char	*cmd_p;
 	int		input_file;
 	int		output_file;
 	char	*cmd_w_slash;
@@ -48,6 +47,7 @@ char	*ft_strchr(const char *s, int c);
 void	execute_command(t_data *arg);
 void	errors(char	*str);
 void	execute_command_two(t_data *arg);
+char	**ft_split_spaces(char *str);
 // char	*check_env(t_data *data);
 
 

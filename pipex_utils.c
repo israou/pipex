@@ -6,11 +6,21 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:57:04 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 02:50:39 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 22:09:41 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+int	ft_strlen(const char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+		i++;
+	return (i);
+}
 
 int	ft_strncmp(const char *s1, char *s2, unsigned int n)
 {
@@ -32,93 +42,6 @@ int	ft_strncmp(const char *s1, char *s2, unsigned int n)
 	return (0);
 }
 
-static int	countword(const char *str, char c)
-{
-	int		i;
-	int		count;
-
-	i = 0;
-	count = 0;
-	while (str[i])
-	{
-		while (str[i] && str[i] == c)
-			i++;
-		if (str[i] != '\0')
-			count++;
-		while (str[i] && str[i] != c)
-			i++;
-	}
-	return (count);
-}
-
-static char	*get_word(const char *s, char c, int *i)
-{
-	char	*ptr;
-	int		start;
-	int		len;
-	int		k;
-
-	while (s[*i] && s[*i] == c)
-		(*i)++;
-	start = *i;
-	while (s[*i] && s[*i] != c)
-		(*i)++;
-	len = *i - start;
-	ptr = (char *)malloc(sizeof(char) * (len + 1));
-	if (!ptr)
-		return (NULL);
-	k = 0;
-	while (*i - start > k)
-	{
-		ptr[k] = s[start + k];
-		k++;
-	}
-	ptr[k] = '\0';
-	return (ptr);
-}
-
-static char	**ft_free(char **s)
-{
-	int		i;
-
-	i = 0;
-	while (s[i])
-	{
-		free(s[i]);
-		i++;
-	}
-	free(s);
-	return (NULL);
-}
-
-char	**ft_split(const char *s, char c)
-{
-	char	**res;
-	int		wc;
-	int		r;
-	int		i;
-
-	if (!s)
-		return (NULL);
-	wc = countword(s, c);
-	res = (char **)malloc(sizeof(char *) * (wc + 1));
-	if (!res)
-		return (free((char *)s), NULL);
-	r = 0;
-	i = 0;
-	while (wc > r)
-	{
-		res[r] = get_word(s, c, &i);
-		if (!res[r])
-			return (free((char *)s), ft_free(res));
-		r++;
-	}
-	res[wc] = NULL;
-	// free((char *)s);
-	return (res);
-}
-
-
 void	errors(char	*str)
 {
 	int	i;
@@ -131,13 +54,6 @@ void	errors(char	*str)
 	}
 	exit(EXIT_FAILURE);
 }
-
-// void	check_env(t_data *data)
-// {
-// 	if (data->path == NULL)
-// 		perror("Error\n ENV");
-// 		exit(EXIT_FAILURE);
-// }
 
 char	*ft_strchr(const char *s, int c)
 {
@@ -155,4 +71,30 @@ char	*ft_strchr(const char *s, int c)
 	if (s[i] == (unsigned char)c)
 		return ((char *) s + i);
 	return (NULL);
+}
+char	*ft_strjoin(char *s1, char *s2)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	if (s1 == NULL || s2 == NULL)
+		return (NULL);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (str == NULL)
+		return (NULL);
+	while (s1[i])
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j])
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
 }

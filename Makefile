@@ -6,7 +6,7 @@
 #    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/03/24 15:49:49 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/03/25 22:06:49 by ichaabi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,8 @@ RM = rm -f
 
 SRC =	pipex.c \
 		pipex_utils.c \
-		ft_strjoin.c \
+		split.c \
+		split_spaces.c \
 
 
 SRC_B =

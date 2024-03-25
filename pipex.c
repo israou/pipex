@@ -6,25 +6,12 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 17:09:22 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 22:01:28 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-// char	*check_env(t_data *data)
-// {
-// 	if (data->path == NULL)
-// 		perror("Error\n ENV");
-// 		exit(EXIT_FAILURE);
-// 	if (ft_strchr(data->cmd_p, '/'))
-// 	{
-// 		if (access(data->cmd_p, F_OK | X_OK) == 0)
-// 			return (data->cmd_p);
-// 	}
-// 	return (NULL);
-// }
-//---------------------------------------------------
 char	**whereis_paths(t_data *arg)
 {
 	int		i;//parcourt la variable env,, puis les chemins extraits de paths
@@ -83,7 +70,7 @@ char	*add_slash_to_path(t_data *arg)
 
 void	process_child1(t_data *arg, int *fd, char *av[])
 {
-	arg->content = ft_split(av[2], ' ');
+	arg->content = ft_split_spaces(av[2]);
 	close(fd[0]);//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
@@ -107,14 +94,13 @@ void	process_child1(t_data *arg, int *fd, char *av[])
 	}
 	close(fd[1]);
 	execute_command(arg);
-	// execve(av[2], &av[2], env);//executer la cmd1
 	perror("ERREUR LORS DE L'EXECUTION DE LA 1ERE CMD");
 	process_child2(arg, fd, av);
 }
 
 void	process_child2(t_data *arg, int *fd, char *av[])
 {
-	arg->content = ft_split(av[3], ' ');
+	arg->content = ft_split_spaces(av[3]);
 	close(fd[1]);//fermer le fd stoutput,, il n ecrira pas dans |
 	arg->output_file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);//O_TRUNC vide le fichier avant son ouverture
 	if (arg->output_file == -1)
@@ -134,8 +120,6 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 	close(fd[0]);
 	// dprintf(2, "fdfddfd\n");
 	execute_command_two(arg);
-	// //path dial av[3]
-	// execve(av[3], &av[3], env);
 	errors("ERREUR LORS DE L'EXECUTION DE LA CMD2");
 }
 void	execute_command(t_data *arg)
@@ -181,7 +165,6 @@ int main(int ac, char **av, char **env)
 	if (arg == NULL)
 		errors("ARG ALLOCATION\n");
 	arg->env = env;
-	arg->cmd_p = av[2];
 	arg->cmd = av[2];
 	arg->cmd2 = av[3];
 	if (ac == 5)
