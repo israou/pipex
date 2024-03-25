@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 02:34:15 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/25 03:42:45 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*add_slash_to_path(t_data *arg)
 		tmp = ft_strjoin(arg->path[i], "/");
 		if (tmp)
 		{
-			cmd_w_slash = ft_strjoin(tmp, arg->cmd_p);
+			cmd_w_slash = ft_strjoin(tmp, arg->content[0]);
 			// printf(2, "%s\n", cmd_w_slash);
 			free(tmp);
 			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)//hyedt x_ok nshouf ghir wsh kayn
@@ -140,16 +140,16 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 }
 void	execute_command(t_data *arg)
 {
-	if (ft_strchr(arg->cmd, '/'))
-	{
-		if (access(arg->cmd, F_OK) == 0)
-			return ;
-		errors("cmd not found\n");
-	}
+	// if (ft_strchr(arg->cmd, '/'))
+	// {
+	// 	if (access(arg->cmd, F_OK) == 0)
+	// 		return ;
+	// 	errors("cmd not found\n");
+	// }
 	arg->cmd = add_slash_to_path(arg);
 	if (!arg->cmd)
 		errors("eerroorr\n");
-	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
+	// dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
 	execve(arg->cmd, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 1\n");
 }
@@ -165,7 +165,7 @@ void	execute_command_two(t_data *arg)
 	arg->cmd2  = add_slash_to_path(arg);
 	if (!arg->cmd2)
 		errors("eerroorr\n");
-	dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
+	// dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
@@ -177,14 +177,13 @@ int main(int ac, char **av, char **env)
 	int		fd[2];
 	t_data	*arg;
 
-
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (arg == NULL)
 		errors("ARG ALLOCATION\n");
 	arg->env = env;
 	arg->cmd_p = av[2];
 	arg->cmd = av[2];
-
+	arg->cmd2 = av[3];
 	if (ac == 5)
 	{
 		if (pipe(fd) == -1)
