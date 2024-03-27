@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/25 22:01:28 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/26 15:51:59 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,7 @@ void	execute_command_two(t_data *arg)
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
+
 
 int main(int ac, char **av, char **env)
 {
