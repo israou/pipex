@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/26 15:51:59 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/27 04:03:31 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,12 @@ char	*add_slash_to_path(t_data *arg)
 // représentant le chemin complet de la commande "ls" située dans le répertoire "/usr/bin"
 
 
+void close_and_print_error(int *fd, int to_close, char *error)
+{
+	perror(error);
+	close(fd[to_close]);
+}
+
 void	process_child1(t_data *arg, int *fd, char *av[])
 {
 	arg->content = ft_split_spaces(av[2]);
@@ -75,21 +81,18 @@ void	process_child1(t_data *arg, int *fd, char *av[])
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
 	{
-		perror("ERROR OPENING INPUT FILE\n");
-		close(fd[1]);
+		close_and_print_error(fd, 1, "ERROR OPENING INPUT FILE\n");
 		process_child2(arg, fd, av);//cat | ls//exit
 	}
 	if (dup2(arg->input_file, STDIN_FILENO) == -1)
 	{
-		perror("ERROR IN REDIRECTION VERS STDIN\n");
-		close(arg->input_file);
+		close_and_print_error(fd, arg->input_file, "ERROR IN REDIRECTION VERS STDIN\n");
 		process_child2(arg, fd, av);//n exit
 	}
 	close(arg->input_file);//fermer le fichier d entrée apres redirection
 	if (dup2(fd[1], STDOUT_FILENO) == -1)//hit l output likikhrej khass ndewzo lpipe bash tqrah lcommande lakhra
 	{
-		perror("ERROR IN REDIRECTION VERS STDOUT");
-		close(fd[1]);
+		close_and_print_error(fd, 1, "ERROR IN REDIRECTION VERS STDOUT");
 		process_child2(arg, fd, av);//n exit
 	}
 	close(fd[1]);
@@ -153,13 +156,33 @@ void	execute_command_two(t_data *arg)
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
-
-
-int main(int ac, char **av, char **env)
+void generate_processes(int ac, char **av, t_data *arg)
 {
 	pid_t	pid1;
 	pid_t	pid2;
 	int		fd[2];
+
+	if (pipe(fd) == -1)
+		errors("pipe failat");
+	pid1 = fork();
+	if (pid1 == -1)
+		errors("ERREUR LORS DE LA CREATION DU PROCESSUS CHILD 1\n");
+	if (pid1 == 0)
+		process_child1(arg, fd, av);
+	pid2 = fork();
+	if (pid2 == -1)
+		errors("");
+	if (pid2 == 0)
+		process_child2(arg, fd, av);
+
+	close(fd[0]);
+	close(fd[1]);
+	wait(NULL);
+	wait(NULL);
+}
+
+int main(int ac, char **av, char **env)
+{
 	t_data	*arg;
 
 	arg = (t_data *)malloc(sizeof(t_data));
@@ -170,23 +193,7 @@ int main(int ac, char **av, char **env)
 	arg->cmd2 = av[3];
 	if (ac == 5)
 	{
-		if (pipe(fd) == -1)
-			errors("pipe failat");
-		pid1 = fork();
-		if (pid1 == -1)
-			errors("ERREUR LORS DE LA CREATION DU PROCESSUS CHILD 1\n");
-		if (pid1 == 0)
-			process_child1(arg, fd, av);
-		pid2 = fork();
-		if (pid2 == -1)
-			errors("");
-		if (pid2 == 0)
-			process_child2(arg, fd, av);
-
-		close(fd[0]);
-		close(fd[1]);
-		wait(NULL);
-		wait(NULL);
+		generate_processes(ac, av, arg);
 	}
 	else
 	{

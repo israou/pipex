@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/26 00:55:30 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/27 03:50:21 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	**whereis_paths(t_data *arg)
 	return (NULL);
 }
 
-char	*add_slash_to_path(t_data *arg)
+char	*add_slash_tpath(t_data *arg)
 {
 	int		i;
 	char	*tmp;
@@ -60,22 +60,50 @@ char	*add_slash_to_path(t_data *arg)
 	return (NULL);
 }
 
-void	heredoc(int ac, char **av)
-{
-	if (ac < 6)
-		errors("pas assez de commandes");
-	
 
-}
-
-// void	execute_multi_pipe(t_data *arg, char **cmds, int num_cmd)
+// int	count_cmd(t_data *arg)
 // {
 // 	int	i;
+// 	int	count;
 
-// 	i = 0;
-// 	arg->path = whereis_paths(arg);
-// 	while (i < num_cmd)
+// 	i = 2;
+// 	count = 0;
+// 	while (arg->cmds[i])
 // 	{
-
+// 		count++;
+// 		i++;
 // 	}
+// 	if (count == 0)
+// 		errors("NO COMMANDS!!\n");
+// 	return (count);
 // }
+
+void	multiples_cmd(t_data *arg, int ac, char **av)
+{
+	int	i;
+	pid_t	pid;
+
+	i = 2;
+	if (ac <= 5)
+		errors("y a pas assez de commandes\n");
+	arg->path = add_slash_to_path(arg);
+	int prcss = ac - 3;
+	while(av[i])
+	{
+		arg->cmds = ft_split_spaces(av[i]);
+		i++;
+	}
+	i = 2;
+	while (prcss)
+	{
+		pid = fork();
+		prcss--;
+	}
+}
+
+int main(int ac, char **av, t_data *arg)
+{
+	t_data	*arg;
+	arg = (char **)malloc(sizeof(t_data));
+
+}
