@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/27 04:04:26 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/29 03:45:15 by israachaabi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	execute_command(t_data *arg);
 void	errors(char	*str);
 void	execute_command_two(t_data *arg);
 char	**ft_split_spaces(char *str);
-void generate_processes(int ac, char **av, t_data *arg);
+void	generate_processes(char **av, t_data *arg);
+void 	close_and_print_error(int *fd, int to_close, char *error);
 
 #endif

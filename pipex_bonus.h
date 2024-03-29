@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/27 03:38:53 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/29 03:45:36 by israachaabi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,12 @@ typedef struct s_data
 	char	**path;
 	char	**env;
 	char	**content;
-	char	*firscmd;
-	char	*lastcmd;
 	int		input_file;
 	int		output_file;
 	char	*cmd_w_slash;
 	char	**cmds;
-	int		count;
+	char	*cmd;
+	int		prcss;
 }			t_data;
 
 int		ft_strlen(const char *str);
@@ -44,7 +43,13 @@ char	**ft_split(const char *s, char c);
 int		ft_strncmp(const char *s1, char *s2, unsigned int n);
 void	errors(char	*str);
 char	**ft_split_spaces(char *str);
-
+char	**whereis_paths(t_data *arg);
+char	*add_slash_to_path(t_data *arg);
+int		count_commands(char **args, int ac);
+void	redirect_input(t_data *arg, char **av);
+void	redirect_output(int *fd);
+void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
+void	execute_cmds(t_data *arg, int ac, char **av);
 
 
 

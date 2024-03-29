@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/27 04:03:31 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/03/29 01:46:36 by israachaabi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,7 +156,9 @@ void	execute_command_two(t_data *arg)
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
-void generate_processes(int ac, char **av, t_data *arg)
+
+
+void generate_processes(char **av, t_data *arg)
 {
 	pid_t	pid1;
 	pid_t	pid2;
@@ -193,7 +195,7 @@ int main(int ac, char **av, char **env)
 	arg->cmd2 = av[3];
 	if (ac == 5)
 	{
-		generate_processes(ac, av, arg);
+		generate_processes(av, arg);
 	}
 	else
 	{

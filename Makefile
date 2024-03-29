@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
+#    By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/03/25 22:06:49 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/03/29 03:55:28 by israachaabi      ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,10 @@ SRC =	pipex.c \
 		split_spaces.c \
 
 
-SRC_B =
+SRC_B =	pipex_bonus.c \
+		split_spaces_bonus.c \
+		split_bonus.c \
+		pipex_utils_bonus.c \
 
 OBJ = $(SRC:.c=.o)
 
