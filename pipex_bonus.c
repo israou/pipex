@@ -126,6 +126,8 @@ void	execute_cmds(t_data *arg, int i, int *fd, int ac, char **av)
 			dup2(arg->output_file, STDOUT_FILENO);
 			close(arg->output_file);
 		}
+		close(fd[0]);
+		close(fd[1]);
 		if (execve(arg->cmd, arg->content, arg->env) == -1)
 			perror("ERROR EXECUTING COMMAND\n");
 		exit(EXIT_FAILURE);
