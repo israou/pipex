@@ -6,7 +6,7 @@
 /*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 04:01:09 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/03/29 04:37:09 by israachaabi      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,23 +86,27 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	{
 		if (pipe(fd) == -1)
 			errors("ERROR CREATION FAILED");
-		arg->cmds = ft_split_spaces(av[i]);
+		arg->content = ft_split_spaces(av[i]);
 		if (i != 2)
 		{
 			dup2(fd[0], STDIN_FILENO);
 			close(fd[0]);
 		}
 		else
-			redirect_input(arg, &av[1]);
+			redirect_input(arg, av);
 		if (i != ac - 2)
 			redirect_output(fd);
-		execute_cmds(arg, ac, av);
-		exit(EXIT_SUCCESS);
 		i++;
 	}
+	arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (arg->output_file == -1)
+		errors("ERROR OPENING OUTPUT FILE");
+	redirect_output(fd);
+	execute_cmds(arg);
+	exit(EXIT_SUCCESS);
 }
 
-void	execute_cmds(t_data *arg, int ac, char **av)
+void	execute_cmds(t_data *arg)
 {
 	pid_t	pid;
 
@@ -112,10 +116,14 @@ void	execute_cmds(t_data *arg, int ac, char **av)
 		if (pid == -1)
 			errors("FORK FAILED");
 		else if (pid == 0)
-			redirect_multiples_cmd(arg, ac, av);
+			{
+				if (execve(arg->cmd, arg->content, arg->env) == -1)
+					perror("ERROR EXECUTING COMMAND\n");
+				exit(EXIT_FAILURE);
+			}
 		else
 			waitpid(pid, NULL, 0);
-		arg->prcss--;
+		//arg->prcss--;
 	}	
 }
 
@@ -138,18 +146,18 @@ int	count_commands(char **args, int ac)
 int main(int ac, char **av, char **env)
 {
 	t_data *arg;
+
+	if (ac <= 5)
+		errors("NOT ENOUGH ARGUMENTS\n");
+
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (!arg)
 		perror("MEMORY ALLOCATION FAILED!\n");
 		exit(EXIT_FAILURE);
 	arg->env = env;
-	if (ac <= 5)
-		errors("y a pas assez de commandes\n");
-	while (ac >= 6)
-	{
-		puts("israa");
-		execute_cmds(arg, ac, av);	
-	}
+	
+	redirect_multiples_cmd(arg, ac, av);
+	
 }
 	//while (arg->prcss)
 	//{

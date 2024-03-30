@@ -49,7 +49,7 @@ int		count_commands(char **args, int ac);
 void	redirect_input(t_data *arg, char **av);
 void	redirect_output(int *fd);
 void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
-void	execute_cmds(t_data *arg, int ac, char **av);
+void	execute_cmds(t_data *arg);
 
 
 
