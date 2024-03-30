@@ -68,6 +68,7 @@ void	redirect_input(t_data *arg, char **av)
 		return ;
 	}
 	dup2(arg->input_file, STDIN_FILENO);
+	close(arg->input_file);
 }
 void	redirect_output(int *fd)
 {
@@ -80,13 +81,33 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	int	fd[2];
 
 	i = 2;
-	arg->cmd = add_slash_to_path(arg);
+	//arg->cmd = add_slash_to_path(arg);
 	arg->prcss = count_commands(av, ac);
 	while (i < ac - 1)
 	{
 		if (pipe(fd) == -1)
 			errors("ERROR CREATION FAILED");
 		arg->content = ft_split_spaces(av[i]);
+		arg->cmd = add_slash_to_path(arg);
+		execute_cmds(arg, i, fd, ac, av);
+		i++;
+	}
+	i = -1;
+	while (++i > arg->prcss)
+		close(fd[1]);
+		wait(NULL);
+	exit(EXIT_SUCCESS);
+}
+
+void	execute_cmds(t_data *arg, int i, int *fd, int ac, char **av)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		errors("FORK FAILED\n");
+	else if (pid == 0)
+	{
 		if (i != 2)
 		{
 			dup2(fd[0], STDIN_FILENO);
@@ -96,35 +117,18 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 			redirect_input(arg, av);
 		if (i != ac - 2)
 			redirect_output(fd);
-		i++;
-	}
-	arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-	if (arg->output_file == -1)
-		errors("ERROR OPENING OUTPUT FILE");
-	redirect_output(fd);
-	execute_cmds(arg);
-	exit(EXIT_SUCCESS);
-}
-
-void	execute_cmds(t_data *arg)
-{
-	pid_t	pid;
-
-	while (arg->prcss)
-	{
-		pid = fork();
-		if (pid == -1)
-			errors("FORK FAILED");
-		else if (pid == 0)
-			{
-				if (execve(arg->cmd, arg->content, arg->env) == -1)
-					perror("ERROR EXECUTING COMMAND\n");
-				exit(EXIT_FAILURE);
-			}
 		else
-			waitpid(pid, NULL, 0);
-		//arg->prcss--;
-	}	
+		{
+			arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			if (arg->output_file == -1)
+				errors("ERROR OPENING OUTPUT FILE");
+			dup2(arg->output_file, STDOUT_FILENO);
+			close(arg->output_file);
+		}
+		if (execve(arg->cmd, arg->content, arg->env) == -1)
+			perror("ERROR EXECUTING COMMAND\n");
+		exit(EXIT_FAILURE);
+	}
 }
 
 int	count_commands(char **args, int ac)
@@ -152,23 +156,12 @@ int main(int ac, char **av, char **env)
 
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (!arg)
+	{
 		perror("MEMORY ALLOCATION FAILED!\n");
 		exit(EXIT_FAILURE);
+	}
 	arg->env = env;
 	
 	redirect_multiples_cmd(arg, ac, av);
 	
 }
-	//while (arg->prcss)
-	//{
-	//	pid = fork();
-	//	arg->prcss--;
-
-
-	//arg->input_file = open(av[1], O_RDONLY, 0666);
-			//if (arg->input_file == -1)
-			//{
-			//	perror("ERROR OPENING INPUT FILE");
-			///	continue;
-			//}
-			//dup2(arg->input_file, STDIN_FILENO);
