@@ -93,8 +93,9 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 		i++;
 	}
 	i = -1;
+	close(fd[1]);
+	close(fd[0]);
 	while (++i > arg->prcss)
-		close(fd[1]);
 		wait(NULL);
 	exit(EXIT_SUCCESS);
 }
@@ -151,7 +152,7 @@ int main(int ac, char **av, char **env)
 {
 	t_data *arg;
 
-	if (ac <= 5)
+	if (ac < 5)
 		errors("NOT ENOUGH ARGUMENTS\n");
 
 	arg = (t_data *)malloc(sizeof(t_data));
