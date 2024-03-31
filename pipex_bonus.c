@@ -79,17 +79,40 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 {
 	int	i;
 	int	fd[2];
+	int	in;
+	int	out;
 
 	i = 2;
-	//arg->cmd = add_slash_to_path(arg);
+	in = dup(0);//ki saver 0 w 1 aslyin
+	out = dup(1);
 	arg->prcss = count_commands(av, ac);
 	while (i < ac - 1)
 	{
+		if (i != 2)
+		{
+			dup2(fd[0], STDIN_FILENO);
+			close(fd[0]);
+		}
+		else
+			redirect_input(arg, av);
 		if (pipe(fd) == -1)
 			errors("ERROR CREATION FAILED");
+		if (i != ac - 2)
+			redirect_output(fd);
+		else
+		{
+			arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+			if (arg->output_file == -1)
+				errors("ERROR OPENING OUTPUT FILE\n");
+			dup2(arg->output_file, STDOUT_FILENO);
+			close(arg->output_file);
+		}
+		close(fd[1]);
 		arg->content = ft_split_spaces(av[i]);
 		arg->cmd = add_slash_to_path(arg);
-		execute_cmds(arg, i, fd, ac, av);
+		execute_cmds(arg,fd);
+		dup2(in, STDIN_FILENO);
+		dup2(out, STDOUT_FILENO);
 		i++;
 	}
 	i = -1;
@@ -100,7 +123,7 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	exit(EXIT_SUCCESS);
 }
 
-void	execute_cmds(t_data *arg, int i, int *fd, int ac, char **av)
+void	execute_cmds(t_data *arg, int *fd)
 {
 	pid_t	pid;
 
@@ -109,26 +132,9 @@ void	execute_cmds(t_data *arg, int i, int *fd, int ac, char **av)
 		errors("FORK FAILED\n");
 	else if (pid == 0)
 	{
-		if (i != 2)
-		{
-			dup2(fd[0], STDIN_FILENO);
-			close(fd[0]);
-		}
-		else
-			redirect_input(arg, av);
-		if (i != ac - 2)
-			redirect_output(fd);
-		else
-		{
-			arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			if (arg->output_file == -1)
-				errors("ERROR OPENING OUTPUT FILE");
-			dup2(arg->output_file, STDOUT_FILENO);
-			close(arg->output_file);
-		}
 		close(fd[0]);
 		close(fd[1]);
-		if (execve(arg->cmd, arg->content, arg->env) == -1)
+		if (execve(arg->cmd, arg->content, arg->env) == 0)
 			perror("ERROR EXECUTING COMMAND\n");
 		exit(EXIT_FAILURE);
 	}
