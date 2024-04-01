@@ -38,8 +38,6 @@ char	**ft_split(const char *s, char c);
 int		ft_strncmp(const char *s1, char *s2, unsigned int n);
 char	**whereis_paths(t_data *data);
 char	*add_slash_to_path(t_data *arg);
-// void	free_path(t_data *arg);
-// void	free_cmd(t_data *arg);
 void	process_child1(t_data *arg, int *fd, char *av[]);
 void	process_child2(t_data *arg, int *fd, char *av[]);
 char	*ft_strchr(const char *s, int c);

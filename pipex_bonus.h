@@ -35,6 +35,8 @@ typedef struct s_data
 	char	**cmds;
 	char	*cmd;
 	int		prcss;
+	int		here_doc;
+	char	*limiter;
 }			t_data;
 
 int		ft_strlen(const char *str);
@@ -50,6 +52,8 @@ void	redirect_input(t_data *arg, char **av);
 void	redirect_output(int *fd);
 void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
 void	execute_cmds(t_data *arg, int *fd);
+//----------------------heredoc
+void	read_the_input(int *fd, char **limiter, char *line);
 
 
 

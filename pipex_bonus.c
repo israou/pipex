@@ -166,11 +166,16 @@ int main(int ac, char **av, char **env)
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (!arg)
 	{
-		perror("MEMORY ALLOCATION FAILED!\n");
-		exit(EXIT_FAILURE);
+		errors("MEMORY ALLOCATION FAILED!\n");
 	}
-	arg->env = env;
+	if (ft_strncmp(av[1], "here_doc", 10) != 0)
+	{
+		arg->env = env;
+		redirect_multiples_cmd(arg, ac, av);
+	}
+	if (ft_strncmp(av[1], "here_doc", 10) == 0)
+	{
 	
-	redirect_multiples_cmd(arg, ac, av);
+	}
 	
 }
