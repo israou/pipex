@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 01:46:36 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/02 22:03:23 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,25 +77,30 @@ void close_and_print_error(int *fd, int to_close, char *error)
 void	process_child1(t_data *arg, int *fd, char *av[])
 {
 	arg->content = ft_split_spaces(av[2]);
-	close(fd[0]);//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
+	close(fd[0]);//fd[0] correspond a l extremite de lecture du pipe créé par pipe(), en fermant fd[0] le processus s assure qu il ne lira pas les donnees du pipe
+	//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
 	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
 	if (arg->input_file == -1)
 	{
 		close_and_print_error(fd, 1, "ERROR OPENING INPUT FILE\n");
-		process_child2(arg, fd, av);//cat | ls//exit
+		process_child2(arg, fd, av);//cat | ls
 	}
-	if (dup2(arg->input_file, STDIN_FILENO) == -1)
+	//redirection de l entree standard vers le fichier d entree
+	//Crée un duplicata du descripteur de fichier du fichier d'entrée (arg->input_file).
+	//Place ce duplicata à l'emplacement de l'entrée standard (STDIN_FILENO)
+	if (dup2(arg->input_file, STDIN_FILENO) == -1)//constante predefinie 0,, toutes lecture lira le contenu du fichier d entree av[1]
 	{
 		close_and_print_error(fd, arg->input_file, "ERROR IN REDIRECTION VERS STDIN\n");
 		process_child2(arg, fd, av);//n exit
 	}
-	close(arg->input_file);//fermer le fichier d entrée apres redirection
-	if (dup2(fd[1], STDOUT_FILENO) == -1)//hit l output likikhrej khass ndewzo lpipe bash tqrah lcommande lakhra
+	close(arg->input_file);//fermer le fichier d entrée apres redirection//pour garantir la liberation des ressources et la stabilité du programme
+	//redirection de la sortie standard vers l extremite d ecriture du pipe |
+	if (dup2(fd[1], STDOUT_FILENO) == -1)//l output likikhrej khass ndewzo lpipe bash tqrah lcommande lakhra
 	{
 		close_and_print_error(fd, 1, "ERROR IN REDIRECTION VERS STDOUT");
 		process_child2(arg, fd, av);//n exit
 	}
-	close(fd[1]);
+	close(fd[1]);// important pour garantir que seul process_child1 écrit dans le pipe et que le processus parent peut lire les données écrites
 	execute_command(arg);
 	perror("ERREUR LORS DE L'EXECUTION DE LA 1ERE CMD");
 	process_child2(arg, fd, av);
@@ -108,7 +113,7 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 	arg->output_file = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0666);//O_TRUNC vide le fichier avant son ouverture
 	if (arg->output_file == -1)
 		errors("ERROR OPENING OUTPUT FILE");
-	if (dup2(arg->output_file, STDOUT_FILENO) == -1)
+	if (dup2(arg->output_file, STDOUT_FILENO) == -1)//cree duplicate dial output_file et le pace a l emplacement de stdout,, cela redirige toutess les ecritures a la stdout
 	{
 		perror("ERROR IN REDIRECTIOON VERS STDOUT\n");
 		close(arg->output_file);
@@ -215,12 +220,13 @@ int main(int ac, char **av, char **env)
 // 	path[3] = "/usr/sbin/"
 // 	path[4] = "/sbin/"
 // 	path[5] = NULL
-// int main(int ac, char **av, char **envp)
-// {
-// 	char *options[3] = {"ls", "-la", NULL};
 
-// 	(void)ac;
-// 	(void)av;
-// 	execve("/bin/ls", options, envp);
-// 	return (0);
-// }
+
+//Le descripteur de fichier fd[1] reste ouvert car il est utilisé par le processus parent pour écrire dans le pipe.
+//La fermeture de fd[0] n'affecte pas la capacité de process_child1 à lire depuis le fichier d'entrée av[1].
+//Il est important de toujours fermer les descripteurs de fichiers lorsqu'ils ne sont plus utilisés afin de garantir une utilisation efficace des ressources système.
+
+
+//fd[0] correspond à l'extrémité de lecture du pipe créé par pipe().
+//En fermant fd[0], le processus process_child1 s'assure qu'il ne lira jamais les données du pipe.
+//Cela est crucial car process_child1 doit se concentrer uniquement sur la lecture du fichier d'entrée spécifié (av[1]).

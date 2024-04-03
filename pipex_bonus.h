@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 03:45:36 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/03 01:28:36 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,10 @@ typedef struct s_data
 	char	**cmds;
 	char	*cmd;
 	int		prcss;
-	int		here_doc;
+	char	**here_doc;
 	char	*limiter;
+	char	**cmd1;
+	char	**cmd2;
 }			t_data;
 
 int		ft_strlen(const char *str);
@@ -52,9 +54,12 @@ void	redirect_input(t_data *arg, char **av);
 void	redirect_output(int *fd);
 void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
 void	execute_cmds(t_data *arg, int *fd);
+void	last_cmd(int ac, char **av, t_data *arg);
 //----------------------heredoc
-void	read_the_input(int *fd, char **limiter, char *line);
+void	read_the_input(t_data *arg);
+void	create_here_doc(t_data *arg, int ac, char ***av);
+void	execute_cmd(t_data *arg);
 
 
-
+// last_cmd(ac, av, arg);
 #endif

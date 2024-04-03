@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 04:37:09 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/03 01:28:52 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,12 +75,21 @@ void	redirect_output(int *fd)
 	dup2(fd[1], STDOUT_FILENO);
 	close(fd[1]);
 }
+
+void	last_cmd(int ac, char **av, t_data *arg)
+{
+	arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (arg->output_file == -1)
+		errors("ERROR OPENING OUTPUT FILE\n");
+	dup2(arg->output_file, STDOUT_FILENO);
+	close(arg->output_file);
+}
 void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 {
 	int	i;
-	int	fd[2];
-	int	in;
-	int	out;
+	int	fd[2];//tableau contenant deux fd pour le pipe
+	int	in;//stocke dup dial stdin
+	int	out;//stocke dup dial stdout
 
 	i = 2;
 	in = dup(0);//ki saver 0 w 1 aslyin
@@ -88,38 +97,34 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	arg->prcss = count_commands(av, ac);
 	while (i < ac - 1)
 	{
-		if (i != 2)
+		if (i != 2)//si ce n est pas la premiere commande
 		{
-			dup2(fd[0], STDIN_FILENO);
+			dup2(fd[0], STDIN_FILENO);//ncreer duplicate dial input nheto f l emplacement dial stdin,, la cmd suivante lise la sortie de la commande precedente
 			close(fd[0]);
 		}
-		else
+		else//ila kant la 1ere cmd i == 2
 			redirect_input(arg, av);
 		if (pipe(fd) == -1)
-			errors("ERROR CREATION FAILED");
+			errors("ERROR CREATION pipe FAILED");
 		if (i != ac - 2)
-			redirect_output(fd);
+			redirect_output(fd);//mashi akhir commande
 		else
 		{
-			arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			if (arg->output_file == -1)
-				errors("ERROR OPENING OUTPUT FILE\n");
-			dup2(arg->output_file, STDOUT_FILENO);
-			close(arg->output_file);
+			last_cmd(ac, av, arg);
 		}
-		close(fd[1]);
+		close(fd[1]);//ferme l extremite d ecriture inutilisee du pipe
 		arg->content = ft_split_spaces(av[i]);
 		arg->cmd = add_slash_to_path(arg);
 		execute_cmds(arg,fd);
-		dup2(in, STDIN_FILENO);
+		dup2(in, STDIN_FILENO);//restaurer les fd in et out d origine enregistrés
 		dup2(out, STDOUT_FILENO);
 		i++;
 	}
 	i = -1;
-	close(fd[1]);
+	close(fd[1]);//fermer les fd du pipe inutilisées
 	close(fd[0]);
 	while (++i > arg->prcss)
-		wait(NULL);
+		wait(NULL);//attendre la fin de tout processus fils
 	exit(EXIT_SUCCESS);
 }
 
@@ -175,7 +180,10 @@ int main(int ac, char **av, char **env)
 	}
 	if (ft_strncmp(av[1], "here_doc", 10) == 0)
 	{
-	
+		arg->here_doc = &av[1];
+		arg->limiter = av[2];
+		arg->cmd1 = &av[3];
+		arg->cmd2 = &av[4];
+		create_here_doc(arg, ac, &av);
 	}
-	
 }
