@@ -6,15 +6,14 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:03:52 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/03 17:16:19 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 02:59:07 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	read_the_input(t_data *arg)
+void	read_the_input(t_data *arg, int *fd)
 {
-	int		*fd;
 	char	*line;
 	while (1)
 	{
@@ -37,15 +36,10 @@ void	read_the_input(t_data *arg)
 void	create_here_doc(t_data *arg, int ac, char **av)
 {
 	pid_t	pid;
-	int	fd[2];
-	if (ft_strncmp(av[1], "here_doc", 8) == 0)
-	{
-		arg->here_doc = open(av[1], O_CREAT | O_WRONLY | O_APPEND, 0644);
-		if (arg->here_doc == -1)
-		{
-			errors("ERROR CREATING HEREDOC\n");
-		}
-	}
+	int		fd[2];
+	(void)ac;
+
+	pid = 0;
 	if (pipe(fd) == -1)
 		errors("pipe failed\n"),
 	pid = fork();
@@ -53,25 +47,16 @@ void	create_here_doc(t_data *arg, int ac, char **av)
 		errors("echec lors de la creation du process child\n");
 	if (pid == 0)//child
 	{
-		arg->content = ft_split_spaces(av[3]);
-		close(fd[0]);
-		read_the_input(arg);
+		dup2(fd[1], 1);
+		read_the_input(arg, fd);
 	}
 	else//parent
 	{
 		arg->content = ft_split_spaces(av[4]);
+		dup2(fd[0], STDIN_FILENO); // Rediriger l'entrée standard vers le tube,, lire depuis pipe cmd1
 		close(fd[1]);
-		if (ac == 5)
-		{
-			arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
-			if (arg->output_file == -1)
-				errors("error opening output_file for here_doc");
-		}
-		dup2(fd[0], STDIN_FILENO); // Rediriger l'entrée standard vers le tube
-		dup2(arg->output_file, STDOUT_FILENO); // Rediriger la sortie standard vers le fichier
-		close(fd[0]); // Fermez le descripteur de fichier inutilisé
-		waitpid(pid, NULL, 0);
-		execute_cmd(arg);
+		close(fd[0]);
+		wait(NULL);
 	}
 }
 

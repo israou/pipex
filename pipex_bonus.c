@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/03 17:14:44 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 02:42:38 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,12 @@ void	redirect_output(int *fd)
 
 void	last_cmd(int ac, char **av, t_data *arg)
 {
-	arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
+	if (ft_strncmp(av[1], "here_doc", 10) == 0)
+		arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_APPEND, 0666);
+	else
+		arg->output_file = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0666);
 	if (arg->output_file == -1)
-		errors("ERROR OPENING OUTPUT FILE\n");
+		errors("ERROR OPENING FILE\n");
 	dup2(arg->output_file, STDOUT_FILENO);
 	close(arg->output_file);
 }
@@ -91,6 +94,14 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	int	in;//stocke dup dial stdin
 	int	out;//stocke dup dial stdout
 
+	if (ft_strncmp(av[1], "here_doc", 10) == 0)
+	{
+
+		arg->limiter = av[2];
+		create_here_doc(arg, ac, av);
+	}
+	else
+		redirect_input(arg, av);
 	i = 2;
 	in = dup(0);//ki saver 0 w 1 aslyin
 	out = dup(1);
@@ -102,8 +113,6 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 			dup2(fd[0], STDIN_FILENO);//ncreer duplicate dial input nheto f l emplacement dial stdin,, la cmd suivante lise la sortie de la commande precedente
 			close(fd[0]);
 		}
-		else//ila kant la 1ere cmd i == 2
-			redirect_input(arg, av);
 		if (pipe(fd) == -1)
 			errors("ERROR CREATION pipe FAILED");
 		if (i != ac - 2)
@@ -173,16 +182,16 @@ int main(int ac, char **av, char **env)
 	{
 		errors("MEMORY ALLOCATION FAILED!\n");
 	}
-	if (ft_strncmp(av[1], "here_doc", 10) != 0)
-	{
+	// if (ft_strncmp(av[1], "here_doc", 10) != 0)
+	// {
 		arg->env = env;
 		redirect_multiples_cmd(arg, ac, av);
-	}
+	// }
 	// if (ft_strncmp(av[1], "here_doc", 10) == 0)
 	// {
 	// 	arg->limiter = av[2];
-	// 	arg->cmd1 = &av[3];
-	// 	arg->cmd2 = &av[4];
+	// 	arg->cmd1 = av[3];
+	// 	arg->cmd2 = av[4];
 	// 	create_here_doc(arg, ac, av);
 	// }
 }

@@ -6,21 +6,11 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:01:11 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/26 01:01:28 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 01:09:26 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
-
-int	ft_strlen(const char *s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
-}
 
 int	checknewline(char *s)
 {
@@ -82,4 +72,24 @@ char	*join4gnl(char const *stash, char const *buf)
 	line[i + j] = '\0';
 	free((char *) stash);
 	return (line);
+}
+
+char	*extraction(char const *s, unsigned int start, size_t len)
+{
+	char	*str;
+	size_t	i;
+
+	if (s == NULL)
+		return (NULL);
+	i = 0;
+	str = (char *) malloc (sizeof(*s) * (len + 1));
+	if (!str)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = s[start + i];
+		i++;
+	}
+	str[len] = '\0';
+	return (str);
 }

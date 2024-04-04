@@ -6,7 +6,7 @@
 #    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/04/03 01:29:16 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/04/04 01:07:04 by ichaabi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,8 @@ SRC_B =	pipex_bonus.c \
 		split_bonus.c \
 		pipex_utils_bonus.c \
 		here_doc.c \
+		get_next_line.c \
+		utils_get_next_line.c \
 
 OBJ = $(SRC:.c=.o)
 
