@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/04 02:42:38 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 03:59:40 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	}
 	else
 		redirect_input(arg, av);
+	puts("haitam");
 	i = 2;
 	in = dup(0);//ki saver 0 w 1 aslyin
 	out = dup(1);

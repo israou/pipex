@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:06:45 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/26 00:07:13 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 04:45:19 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,3 +98,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	str[i + j] = '\0';
 	return (str);
 }
+int	ft_strcmp(char *s1, char *s2)
+{
+	int i = 0;
+	while(s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return(s1[i] - s2[i]);
+}
+
