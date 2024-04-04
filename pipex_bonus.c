@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/03 01:28:52 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/03 17:14:44 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ void	execute_cmds(t_data *arg, int *fd)
 	{
 		close(fd[0]);
 		close(fd[1]);
-		if (execve(arg->cmd, arg->content, arg->env) == 0)
+		if (execve(arg->cmd, arg->content, arg->env) == -1)
 			perror("ERROR EXECUTING COMMAND\n");
 		exit(EXIT_FAILURE);
 	}
@@ -178,12 +178,11 @@ int main(int ac, char **av, char **env)
 		arg->env = env;
 		redirect_multiples_cmd(arg, ac, av);
 	}
-	if (ft_strncmp(av[1], "here_doc", 10) == 0)
-	{
-		arg->here_doc = &av[1];
-		arg->limiter = av[2];
-		arg->cmd1 = &av[3];
-		arg->cmd2 = &av[4];
-		create_here_doc(arg, ac, &av);
-	}
+	// if (ft_strncmp(av[1], "here_doc", 10) == 0)
+	// {
+	// 	arg->limiter = av[2];
+	// 	arg->cmd1 = &av[3];
+	// 	arg->cmd2 = &av[4];
+	// 	create_here_doc(arg, ac, av);
+	// }
 }
