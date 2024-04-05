@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:03:52 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/04 23:58:23 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/05 05:48:35 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,10 @@ void	read_the_input(t_data *arg, int *fd)
 		if (ft_strcmp(line, arg->limiter) == 0)//ila lqa limiter av[2]
 		{
 			free(line);
-			// close(fd); fermer avant d executer
 			exit(EXIT_SUCCESS);
 		}
 		write(fd[1], line, ft_strlen(line));
+		write(fd[1], "\n", 1);
 		free(line);
 	}
 }
@@ -38,45 +38,44 @@ void	read_the_input(t_data *arg, int *fd)
 //qui est généralement le côté d'écriture d'un tube (pipe)
 //Cela signifie que cette ligne sera écrite dans le tube pour être lue par un autre processus.
 
-void	create_here_doc(t_data *arg, int ac, char **av)
-{
-	pid_t	pid;
-	int		fd[2];
-	(void)ac;
+// void	create_here_doc(t_data *arg, int ac, char **av)
+// {
+// 	int		pid = -2;
+// 	int		fd[2];
+// 	(void)ac;
+// 	if (pipe(fd) == -1)
+// 		errors("pipe failed\n"),
+// 	pid = fork();
+// 	if (pid == -1)
+// 		errors("echec lors de la creation du process child\n");
 
-	pid = 0;
-	if (pipe(fd) == -1)
-		errors("pipe failed\n"),
-	pid = fork();
-	if (pid == -1)
-		errors("echec lors de la creation du process child\n");
+// 	if (pid == 0)//child
+// 	{
+// 		printf("pid: %d\n",pid);
+// 		arg->content = ft_split_spaces(av[3]);
+// 		arg->cmd1 = add_slash_to_path(arg);
+// 		// close(fd[0]);//fermer l extremite de lecture du pipe
+// 		read_the_input(arg, fd);
+// 		// execve(arg->cmd1, arg->content, arg->env);
+// 		errors("execve process child here_doc failed\n");
+// 	}
+// 	else
+// 	{
+// 		close(fd[1]);
+// 		dup2(fd[0], STDIN_FILENO); // Rediriger l'entrée standard vers le tube,, lire depuis pipe cmd1
+// 		// close(fd[0]);
+// 		arg->content = ft_split_spaces(av[4]);
+// 		// execute_cmd_two(arg, ac, av);
+// 		wait(NULL);
+// 	}
+// }
 
-	if (pid == 0)//child
-	{
-		arg->cmd1 = add_slash_to_path(arg);
-		puts("HEERRREEEEEE1");
-		close(fd[0]);//fermer l extremite de lecture du pipe
-		read_the_input(arg, fd);
-		dup2(fd[1], STDOUT_FILENO);//rediriger la sortie standard vers le pipe
-		close(fd[1]);
-		execve(arg->cmd1, arg->content, arg->env);
-		errors("execve process child here_doc failed\n");
-	}
-	else//parent
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO); // Rediriger l'entrée standard vers le tube,, lire depuis pipe cmd1
-		close(fd[0]);
-		arg->content = ft_split_spaces(av[4]);
-		execute_cmd_two(arg, ac, av);
-		wait(NULL);
-	}
-}
 
 void	execute_cmd_two(t_data *arg, int ac, char **av)
 {
 	arg->cmd2 = add_slash_to_path(arg);
 	arg->output_file = open(av[ac - 1], O_CREAT | O_WRONLY | O_APPEND, 0777);
+	dup2(arg->output_file, 1);
 	if (arg->output_file == -1)
 		errors("error opening output file for here_doc\n");
 	if (execve(arg->cmd2, arg->content, arg->env) == -1)

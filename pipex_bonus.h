@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/04 17:36:05 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/05 05:33:14 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <limits.h>
+#include <sys/types.h>
 
 typedef struct s_data
 {
@@ -40,6 +41,8 @@ typedef struct s_data
 	char	*cmd1;
 	char	*cmd2;
 }			t_data;
+
+void	here_doc(t_data *arg, int ac, char **av);
 
 int		ft_strlen(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
