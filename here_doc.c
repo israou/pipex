@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:03:52 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/04 17:35:44 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/04 23:58:23 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,13 +50,15 @@ void	create_here_doc(t_data *arg, int ac, char **av)
 	pid = fork();
 	if (pid == -1)
 		errors("echec lors de la creation du process child\n");
+
 	if (pid == 0)//child
 	{
 		arg->cmd1 = add_slash_to_path(arg);
+		puts("HEERRREEEEEE1");
 		close(fd[0]);//fermer l extremite de lecture du pipe
+		read_the_input(arg, fd);
 		dup2(fd[1], STDOUT_FILENO);//rediriger la sortie standard vers le pipe
 		close(fd[1]);
-		read_the_input(arg, fd);
 		execve(arg->cmd1, arg->content, arg->env);
 		errors("execve process child here_doc failed\n");
 	}

@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/04 03:59:40 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/05 00:24:56 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ char	**whereis_paths(t_data *arg)
 			if (arg->path)
 				return (arg->path);
 			else
+			{
 				perror("ERROR\n path, split");
 				exit(EXIT_FAILURE);
+			}
 		}
 		i++;
 	}
@@ -43,13 +45,15 @@ char	*add_slash_to_path(t_data *arg)
 	i = 0;
 	cmd_w_slash = NULL;
 	arg->path = whereis_paths(arg);
+
 	while (arg->path[i])
 	{
 		tmp = ft_strjoin(arg->path[i], "/");
 		if (tmp)
 		{
+			// dprintf(2, "%s", arg->content[0]);
 			cmd_w_slash = ft_strjoin(tmp, arg->content[0]);
-			// printf(2, "%s\n", cmd_w_slash);
+			// dprintf(2, "%s\n", cmd_w_slash);
 			free(tmp);
 			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)
 				return (cmd_w_slash);
@@ -94,15 +98,6 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	int	in;//stocke dup dial stdin
 	int	out;//stocke dup dial stdout
 
-	if (ft_strncmp(av[1], "here_doc", 10) == 0)
-	{
-
-		arg->limiter = av[2];
-		create_here_doc(arg, ac, av);
-	}
-	else
-		redirect_input(arg, av);
-	puts("haitam");
 	i = 2;
 	in = dup(0);//ki saver 0 w 1 aslyin
 	out = dup(1);
@@ -114,6 +109,8 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 			dup2(fd[0], STDIN_FILENO);//ncreer duplicate dial input nheto f l emplacement dial stdin,, la cmd suivante lise la sortie de la commande precedente
 			close(fd[0]);
 		}
+		else
+			redirect_input(arg, av);
 		if (pipe(fd) == -1)
 			errors("ERROR CREATION pipe FAILED");
 		if (i != ac - 2)
@@ -183,16 +180,17 @@ int main(int ac, char **av, char **env)
 	{
 		errors("MEMORY ALLOCATION FAILED!\n");
 	}
-	// if (ft_strncmp(av[1], "here_doc", 10) != 0)
-	// {
+	if (ft_strncmp(av[1], "here_doc", 10) != 0)
+	{
 		arg->env = env;
 		redirect_multiples_cmd(arg, ac, av);
-	// }
-	// if (ft_strncmp(av[1], "here_doc", 10) == 0)
-	// {
-	// 	arg->limiter = av[2];
-	// 	arg->cmd1 = av[3];
-	// 	arg->cmd2 = av[4];
-	// 	create_here_doc(arg, ac, av);
-	// }
+	}
+	if (ft_strncmp(av[1], "here_doc", 10) == 0)
+	{
+		arg->env = env;
+		arg->limiter = av[2];
+		arg->cmd1 = av[3];
+		arg->cmd2 = av[4];
+		create_here_doc(arg, ac, av);
+	}
 }
