@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/05 05:49:12 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/06 03:13:48 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av)
 	in = dup(0);//ki saver 0 w 1 aslyin
 	out = dup(1);
 	arg->prcss = count_commands(av, ac);
-
 	while (i < ac - 1)
 	{
 		if (i != 2)//si ce n est pas la premiere commande
@@ -172,92 +171,12 @@ int	count_commands(char **args, int ac)
 }
 
 
-void	create_here_doc(t_data *arg, int ac, char **av)
-{
-	int		pid = -2;
-	int		fd[2];
-	(void)ac;
-	if (pipe(fd) == -1)
-		errors("pipe failed\n"),
-	pid = fork();
-	if (pid == -1)
-		errors("echec lors de la creation du process child\n");
-
-	if (pid == 0)//child
-	{
-		printf("pid: %d\n",pid);
-		arg->content = ft_split_spaces(av[3]);
-		arg->cmd1 = add_slash_to_path(arg);
-		// close(fd[0]);//fermer l extremite de lecture du pipe
-		read_the_input(arg, fd);
-		// execve(arg->cmd1, arg->content, arg->env);
-		errors("execve process child here_doc failed\n");
-	}
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO); // Rediriger l'entrée standard vers le tube,, lire depuis pipe cmd1
-		// close(fd[0]);
-		arg->content = ft_split_spaces(av[4]);
-		// execute_cmd_two(arg, ac, av);
-		wait(NULL);
-	}
-}
-
-void	here_doc(t_data *arg, int ac, char **av)
-{
-	int		pid;
-	int		fd[2];
-
-	if (ac < 6)
-		errors("movaise usage");
-	if (pipe(fd) == -1)
-		errors("pipe failed");
-	pid = fork();
-	if (pid == -1)
-		errors("fork failed");
-	if (pid == 0)
-	{
-		printf("child 1 process\n");
-		close(fd[0]);
-		read_the_input(arg, fd);
-	}
-	printf("PARENT 1 process\n");
-	dup2(fd[0], 0);
-	close(fd[1]);
-	wait(NULL);
-
-
-	if (pipe(fd) == -1)
-		errors("pipe failed");
-	pid = fork();
-	if (pid == -1)
-		errors("fork failed");
-	if (pid == 0)
-	{
-		printf("child 2 process\n");
-		arg->content = ft_split_spaces(av[3]);
-		arg->cmd1 = add_slash_to_path(arg);
-		close(fd[0]);
-		dup2(fd[1], 1);
-		execve(arg->cmd1, arg->content, arg->env);
-	}
-	printf("PARENT 2 process\n");
-	dup2(fd[0], 0);
-	close(fd[1]);
-	wait(NULL);
-
-	arg->content = ft_split_spaces(av[4]);
-	execute_cmd_two(arg, ac, av);
-}
-
 int main(int ac, char **av, char **env)
 {
 	t_data *arg;
 
 	if (ac < 5)
 		errors("NOT ENOUGH ARGUMENTS\n");
-
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (!arg)
 	{
@@ -272,7 +191,6 @@ int main(int ac, char **av, char **env)
 		arg->cmd1 = av[3];
 		arg->cmd2 = av[4];
 		here_doc(arg ,ac, av);
-
 	}
 	else if (ft_strncmp(av[1], "here_doc", 10) != 0)
 	{
@@ -280,3 +198,8 @@ int main(int ac, char **av, char **env)
 		redirect_multiples_cmd(arg, ac, av);
 	}
 }
+
+//Le shell crée un pipe.
+// Il lance un processus fils qui lit l'entrée standard jusqu'à ce qu'il rencontre un délimiteur spécifié.
+// Le processus fils écrit l'entrée lue dans le pipe.
+// Le shell lit le pipe et l'utilise comme entrée pour une autre commande.

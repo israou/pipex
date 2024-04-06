@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/05 05:33:14 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/06 03:15:22 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,6 @@ void	execute_cmds(t_data *arg, int *fd);
 void	last_cmd(int ac, char **av, t_data *arg);
 //----------------------heredoc
 void	read_the_input(t_data *arg, int *fd);
-void	create_here_doc(t_data *arg, int ac, char **av);
 void	execute_cmd_two(t_data *arg, int ac, char **av);
 char	*get_next_line(int fd);
 char	*divising(char *s, char **reste);
@@ -68,8 +67,7 @@ int		checknewline(char *s);
 char	*ft_strdup(char *s);
 char	*join4gnl(char const *stash, char const *buf);
 char	*extraction(char const *s, unsigned int start, size_t len);
-
 int		ft_strcmp(char *s1, char *s2);
-
+void	fork_for_execute(t_data *arg, int ac, char **av);
 // last_cmd(ac, av, arg);
 #endif
