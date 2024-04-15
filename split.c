@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/25 22:05:27 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 03:53:20 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/15 00:06:27 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,6 @@ char	**ft_split(const char *s, char c)
 		r++;
 	}
 	res[wc] = NULL;
-	// free((char *)s);
+	
 	return (res);
 }

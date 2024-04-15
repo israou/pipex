@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:03:52 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/06 02:42:32 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/14 22:14:15 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	here_doc(t_data *arg, int ac, char **av)
 	int		fd[2];
 
 	if (ac < 6)
-		errors("INVALID\n");
+		errors("INVALID NUMBER OF ARGUMENTS\n");
 	if (pipe(fd) == -1)
 		errors("pipe failed");
 	pid = fork();
 	if (pid == -1)
 		errors("fork failed");
-	printf("pid  === %d\n", pid);
+	printf("pid flewel : %d\n", pid);
 	if (pid == 0)
 	{
 		printf("child 1 process\n");

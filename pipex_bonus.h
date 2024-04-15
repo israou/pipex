@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/06 03:15:22 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/14 22:58:59 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,4 +70,11 @@ char	*extraction(char const *s, unsigned int start, size_t len);
 int		ft_strcmp(char *s1, char *s2);
 void	fork_for_execute(t_data *arg, int ac, char **av);
 // last_cmd(ac, av, arg);
+
+
+
+
+
+
+void	free_cmd(char **exp);
 #endif
