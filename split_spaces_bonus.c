@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   split_spaces_bonus.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:07:36 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 03:50:51 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/16 00:39:51 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

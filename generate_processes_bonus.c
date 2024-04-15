@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/14 18:10:17 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/14 18:11:15 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/16 00:27:23 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	count_commands(char **args, int ac)
 	return (prcss);
 }
 
-void	redirect_input(t_data *arg, char **av)
+void	redirect_input_for_firstcmd(t_data *arg, char **av)
 {
 	arg->input_file = open(av[1], O_RDONLY, 0666);
 	if (arg->input_file == -1)
@@ -45,6 +45,12 @@ void	redirect_output(int *fd)
 	close(fd[1]);
 }
 
+void	redirect_input(int *fd)
+{
+	dup2(fd[0], STDIN_FILENO);//ncreer duplicate dial input nheto f l emplacement dial stdin,, la cmd suivante lise la sortie de la commande precedente
+	close(fd[0]);
+}
+
 void	last_cmd(int ac, char **av, t_data *arg)
 {
 	if (ft_strncmp(av[1], "here_doc", 10) == 0)
@@ -55,4 +61,18 @@ void	last_cmd(int ac, char **av, t_data *arg)
 		errors("ERROR OPENING FILE\n");
 	dup2(arg->output_file, STDOUT_FILENO);
 	close(arg->output_file);
+}
+
+
+void	end(t_data *arg)
+{
+	int	i;
+	int	fd[2];
+
+	i = -1;
+	close(fd[1]);//fermer les fd du pipe inutilisées
+	close(fd[0]);
+	while (++i > arg->prcss)
+		wait(NULL);//attendre la fin de tout processus fils
+	exit(EXIT_SUCCESS);
 }

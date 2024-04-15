@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/14 22:58:59 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/16 00:27:06 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,14 @@ char	**ft_split_spaces(char *str);
 char	**whereis_paths(t_data *arg);
 char	*add_slash_to_path(t_data *arg);
 int		count_commands(char **args, int ac);
-void	redirect_input(t_data *arg, char **av);
+void	redirect_input_for_firstcmd(t_data *arg, char **av);
 void	redirect_output(int *fd);
 void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
 void	execute_cmds(t_data *arg, int *fd);
 void	last_cmd(int ac, char **av, t_data *arg);
+void	redirect_input(int *fd);
+void	end(t_data *arg);
+
 //----------------------heredoc
 void	read_the_input(t_data *arg, int *fd);
 void	execute_cmd_two(t_data *arg, int ac, char **av);
@@ -71,10 +74,9 @@ int		ft_strcmp(char *s1, char *s2);
 void	fork_for_execute(t_data *arg, int ac, char **av);
 // last_cmd(ac, av, arg);
 
+void	to_free(char **to_free);
 
+void	free_path(t_data *arg);
+void	all_redirections(int i, int *fd, char **av, int ac, t_data *arg);
 
-
-
-
-void	free_cmd(char **exp);
 #endif

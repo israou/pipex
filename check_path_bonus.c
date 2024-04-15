@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/14 18:09:19 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/15 00:48:28 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:25:32 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,23 +45,16 @@ char	*add_slash_to_path(t_data *arg)
 	i = 0;
 	cmd_w_slash = NULL;
 	arg->path = whereis_paths(arg);
-	// dprintf(2, "%p\n", arg->path);
-
 	while (arg->path[i])
 	{
 		tmp = ft_strjoin(arg->path[i], "/");
 		if (tmp)
 		{
-			// dprintf(2, "%s", arg->content[0]);
 			cmd_w_slash = ft_strjoin(tmp, arg->content[0]);
-			// dprintf(2, "%s\n", cmd_w_slash);
 			free(tmp);
 			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)
 			{
-				int j = 0;
-				while(arg->path[j])
-					free(arg->path[j++]);
-				free(arg->path);
+				free_path(arg);
 				return (cmd_w_slash);
 			}
 			free(cmd_w_slash);
@@ -69,4 +62,14 @@ char	*add_slash_to_path(t_data *arg)
 		i++;
 	}
 	return (NULL);
+}
+
+void	free_path(t_data *arg)
+{
+	int	j;
+
+	j = 0;
+	while(arg->path[j])
+		free(arg->path[j++]);
+	free(arg->path);
 }

@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 18:19:13 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/15 00:04:39 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/15 20:53:26 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 
 char	**whereis_paths(t_data *arg)
 {
-	int		i;//parcourt la variable env,, puis les chemins extraits de paths
+	int		i;
 
 	i = 0;
 	while (arg->env[i])
 	{
 		if (ft_strncmp(arg->env[i], "PATH", 4) == 0)
 		{
-			arg->path = ft_split(arg->env[i] + 5, ':');//deplacer le pointeur de 5 positions pour eliminer PATHS=
+			arg->path = ft_split(arg->env[i] + 5, ':');
 			if (arg->path)
 				return (arg->path);
 			else
@@ -32,9 +32,6 @@ char	**whereis_paths(t_data *arg)
 	}
 	return (NULL);
 }
-
-//PATH contient une liste de répertoires où le système recherche les exécutables
-//access()vérifie si le programme peut accéder au fichier pathname
 
 char	*add_slash_to_path(t_data *arg)
 {
@@ -51,9 +48,8 @@ char	*add_slash_to_path(t_data *arg)
 		if (tmp)
 		{
 			cmd_w_slash = ft_strjoin(tmp, arg->content[0]);
-			// printf(2, "%s\n", cmd_w_slash);
 			free(tmp);
-			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)//hyedt x_ok nshouf ghir wsh kayn
+			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)
 				return (cmd_w_slash);
 			free(cmd_w_slash);
 		}
@@ -61,10 +57,6 @@ char	*add_slash_to_path(t_data *arg)
 	}
 	return (NULL);
 }
-
-//Par exemple, si arg->path[i] est "/usr/bin" et arg->content[0] est "ls"
-// la fonction crée un nouveau chemin "/usr/bin/ls",
-// représentant le chemin complet de la commande "ls" située dans le répertoire "/usr/bin"
 
 void close_and_print_error(int *fd, int to_close, char *error)
 {

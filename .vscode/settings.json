@@ -4,6 +4,7 @@
         "bitset": "c",
         "unordered_map": "c",
         "chrono": "c",
-        "pipex_bonus.h": "c"
+        "pipex_bonus.h": "c",
+        "complex": "c"
     }
 }

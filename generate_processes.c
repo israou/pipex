@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 18:21:32 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/13 18:21:52 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/15 21:22:33 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	generate_processes(char **av, t_data *arg)
 		errors("");
 	if (pid2 == 0)
 		process_child2(arg, fd, av);
-
 	close(fd[0]);
 	close(fd[1]);
 	wait(NULL);

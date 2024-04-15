@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/14 17:43:56 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/15 22:53:15 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,8 @@
 void	process_child1(t_data *arg, int *fd, char *av[])
 {
 	arg->content = ft_split_spaces(av[2]);
-	close(fd[0]);//fd[0] correspond a l extremite de lecture du pipe créé par pipe(), en fermant fd[0] le processus s assure qu il ne lira pas les donnees du pipe
-	//processchild1 ne lira pas a partir du | car il doit se concentrer sur la lecture a partir de fichier d entrée specifiéas
-	arg->input_file = open(av[1], O_RDONLY, 0666);//ouvrir le fichier d entrée en lecture seule
+	close(fd[0]);
+	arg->input_file = open(av[1], O_RDONLY, 0666);
 	if (arg->input_file == -1)
 	{
 		close_and_print_error(fd, 1, "ERROR OPENING INPUT FILE\n");
@@ -29,10 +28,9 @@ void	process_child1(t_data *arg, int *fd, char *av[])
 	if (dup2(arg->input_file, STDIN_FILENO) == -1)//constante predefinie 0,, toutes lecture lira le contenu du fichier d entree av[1]
 	{
 		close_and_print_error(fd, arg->input_file, "ERROR IN REDIRECTION VERS STDIN\n");
-		process_child2(arg, fd, av);//n exit
+		process_child2(arg, fd, av);
 	}
-	close(arg->input_file);//fermer le fichier d entrée apres redirection//pour garantir la liberation des ressources et la stabilité du programme
-	//redirection de la sortie standard vers l extremite d ecriture du pipe |
+	close(arg->input_file);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)//l output likikhrej khass ndewzo lpipe bash tqrah lcommande lakhra
 	{
 		close_and_print_error(fd, 1, "ERROR IN REDIRECTION VERS STDOUT");
@@ -57,45 +55,31 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 		close(arg->output_file);
 		exit(EXIT_FAILURE);
 	}
-	close(arg->output_file);//fermer en cas de succês
+	close(arg->output_file);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
 		errors("ERROR IN REDIRECTION VERS STDIN\n");
 		close(fd[0]);
 	}
-	close(fd[0]);//ana asln redirigit la lecture men lpipe l stdin donc kan closeha moraha pour aussi eviter les fuites de memoires
-	// dprintf(2, "fdfddfd\n");
+	close(fd[0]);
 	execute_command_two(arg);
 	errors("ERREUR LORS DE L'EXECUTION DE LA CMD2");
 }
+
 void	execute_command(t_data *arg)
 {
-	if (ft_strchr(arg->cmd, '/'))
-	{
-		if (access(arg->cmd, F_OK) == 0)
-			return ;
-		errors("cmd not found\n");
-	}
 	arg->cmd = add_slash_to_path(arg);
 	if (!arg->cmd)
-		errors("Error\n lors de la verification de la validité de la premiere commande\n");
-	// dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
+		errors("Error\n --lors de la verification de la validité de la premiere commande--\n");
 	execve(arg->cmd, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 1\n");
 }
 
 void	execute_command_two(t_data *arg)
 {
-	if (ft_strchr(arg->cmd, '/'))
-	{
-		if (access(arg->cmd, F_OK) == 0)
-			return ;
-		errors("cmd not found\n");
-	}
 	arg->cmd2  = add_slash_to_path(arg);
 	if (!arg->cmd2)
 		errors("Error\n --lors de la verification de la validité de la deuxième commande--\n");
-	// dprintf(2, "%s````````````%s\n", arg->cmd_p, arg->cmd);
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
