@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/14 18:09:19 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/15 22:25:32 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/16 20:25:49 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ char	**whereis_paths(t_data *arg)
 	int		i;
 
 	i = 0;
-
 	while (arg->env[i])
 	{
 		if (ft_strncmp(arg->env[i], "PATH", 4) == 0)
@@ -26,10 +25,7 @@ char	**whereis_paths(t_data *arg)
 			if (arg->path)
 				return (arg->path);
 			else
-			{
-				perror("ERROR\n path, split");
-				exit(EXIT_FAILURE);
-			}
+				errors("ERROR\n find path\n");
 		}
 		i++;
 	}
@@ -69,7 +65,7 @@ void	free_path(t_data *arg)
 	int	j;
 
 	j = 0;
-	while(arg->path[j])
+	while (arg->path[j])
 		free(arg->path[j++]);
 	free(arg->path);
 }

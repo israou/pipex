@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:06:45 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/06 03:15:17 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/16 19:26:54 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,23 +55,6 @@ void	errors(char	*str)
 	exit(EXIT_FAILURE);
 }
 
-char	*ft_strchr(const char *s, int c)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == (unsigned char)c)
-		{
-			return ((char *) s + i);
-		}
-		i++;
-	}
-	if (s[i] == (unsigned char)c)
-		return ((char *) s + i);
-	return (NULL);
-}
 char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
@@ -98,11 +81,13 @@ char	*ft_strjoin(char *s1, char *s2)
 	str[i + j] = '\0';
 	return (str);
 }
+
 int	ft_strcmp(char *s1, char *s2)
 {
-	int i = 0;
-	while(s1[i] && s2[i] && s1[i] == s2[i])
-		i++;
-	return(s1[i] - s2[i]);
-}
+	int	i;
 
+	i = 0;
+	while (s1[i] && s2[i] && s1[i] == s2[i])
+		i++;
+	return (s1[i] - s2[i]);
+}

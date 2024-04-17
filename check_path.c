@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 18:19:13 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/15 20:53:26 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/16 19:16:04 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ char	**whereis_paths(t_data *arg)
 			if (arg->path)
 				return (arg->path);
 			else
-				perror("ERROR\n find path\n");
-				exit(EXIT_FAILURE);
+				errors("ERROR\n find path\n");
 		}
 		i++;
 	}
@@ -58,7 +57,7 @@ char	*add_slash_to_path(t_data *arg)
 	return (NULL);
 }
 
-void close_and_print_error(int *fd, int to_close, char *error)
+void	close_and_print_error(int *fd, int to_close, char *error)
 {
 	perror(error);
 	close(fd[to_close]);

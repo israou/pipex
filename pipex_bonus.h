@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/16 00:27:06 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/17 18:39:56 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,11 @@
 #  define BUFFER_SIZE 20
 # endif
 
-
 # include <unistd.h>
 # include <stdlib.h>
 # include <stdio.h>
 # include <fcntl.h>
 # include <limits.h>
-#include <sys/types.h>
 
 typedef struct s_data
 {
@@ -43,7 +41,6 @@ typedef struct s_data
 }			t_data;
 
 void	here_doc(t_data *arg, int ac, char **av);
-
 int		ft_strlen(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
 char	**ft_split(const char *s, char c);
@@ -59,9 +56,8 @@ void	redirect_multiples_cmd(t_data *arg, int ac, char **av);
 void	execute_cmds(t_data *arg, int *fd);
 void	last_cmd(int ac, char **av, t_data *arg);
 void	redirect_input(int *fd);
+int		count_arguments(char **av);
 void	end(t_data *arg);
-
-//----------------------heredoc
 void	read_the_input(t_data *arg, int *fd);
 void	execute_cmd_two(t_data *arg, int ac, char **av);
 char	*get_next_line(int fd);
@@ -72,11 +68,8 @@ char	*join4gnl(char const *stash, char const *buf);
 char	*extraction(char const *s, unsigned int start, size_t len);
 int		ft_strcmp(char *s1, char *s2);
 void	fork_for_execute(t_data *arg, int ac, char **av);
-// last_cmd(ac, av, arg);
-
 void	to_free(char **to_free);
-
 void	free_path(t_data *arg);
-void	all_redirections(int i, int *fd, char **av, int ac, t_data *arg);
+void	all_redirections(int i, int *fd, char **av, t_data *arg);
 
 #endif

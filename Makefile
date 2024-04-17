@@ -6,7 +6,7 @@
 #    By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/03/15 00:51:52 by ichaabi           #+#    #+#              #
-#    Updated: 2024/04/14 18:12:27 by ichaabi          ###   ########.fr        #
+#    Updated: 2024/04/16 20:00:06 by ichaabi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ SRC =	pipex.c \
 SRC_B =	pipex_bonus.c \
 		split_spaces_bonus.c \
 		split_bonus.c \
+		count.c \
 		pipex_utils_bonus.c \
 		check_path_bonus.c \
 		generate_processes_bonus.c \

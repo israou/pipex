@@ -3,20 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:40:50 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 03:45:15 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/17 18:40:14 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
 
-
-# include <unistd.h>//open, close, write, read
-# include <stdlib.h>//malloc, free, exit
-# include <stdio.h>//prerror
+# include <unistd.h>
+# include <stdlib.h>
+# include <stdio.h>
 # include <fcntl.h>
 
 typedef struct s_data
@@ -30,7 +29,6 @@ typedef struct s_data
 	int		output_file;
 	char	*cmd_w_slash;
 }			t_data;
-
 
 int		ft_strlen(const char *str);
 char	*ft_strjoin(char *s1, char *s2);
@@ -46,6 +44,6 @@ void	errors(char	*str);
 void	execute_command_two(t_data *arg);
 char	**ft_split_spaces(char *str);
 void	generate_processes(char **av, t_data *arg);
-void 	close_and_print_error(int *fd, int to_close, char *error);
+void	close_and_print_error(int *fd, int to_close, char *error);
 
 #endif

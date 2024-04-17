@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: israachaabi <israachaabi@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:57:04 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/03/29 03:53:29 by israachaabi      ###   ########.fr       */
+/*   Updated: 2024/04/16 19:27:10 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ char	*ft_strchr(const char *s, int c)
 		return ((char *) s + i);
 	return (NULL);
 }
+
 char	*ft_strjoin(char *s1, char *s2)
 {
 	int		i;
