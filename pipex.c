@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/13 21:39:34 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/17 22:32:26 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/21 02:47:04 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ void	process_child1(t_data *arg, int *fd, char *av[])
 	if (dup2(arg->input_file, STDIN_FILENO) == -1)
 	{
 		close_and_print_error(fd, arg->input_file, \
-		"ERROR IN REDIRECTION VERS STDIN\n");
+		"ERROR IN REDIRECTION TO STDIN\n");
 		process_child2(arg, fd, av);
 	}
 	close(arg->input_file);
 	if (dup2(fd[1], STDOUT_FILENO) == -1)
 	{
-		close_and_print_error(fd, 1, "ERROR IN REDIRECTION VERS STDOUT");
+		close_and_print_error(fd, 1, "ERROR IN REDIRECTION TO STDOUT");
 		process_child2(arg, fd, av);
 	}
 	close(fd[1]);
@@ -49,14 +49,14 @@ void	process_child2(t_data *arg, int *fd, char *av[])
 		errors("ERROR OPENING OUTPUT FILE");
 	if (dup2(arg->output_file, STDOUT_FILENO) == -1)
 	{
-		perror("ERROR IN REDIRECTIOON VERS STDOUT\n");
+		perror("ERROR IN REDIRECTIOON TO STDOUT\n");
 		close(arg->output_file);
 		exit(EXIT_FAILURE);
 	}
 	close(arg->output_file);
 	if (dup2(fd[0], STDIN_FILENO) == -1)
 	{
-		errors("ERROR IN REDIRECTION VERS STDIN\n");
+		errors("ERROR IN REDIRECTION TO STDIN\n");
 		close(fd[0]);
 	}
 	close(fd[0]);
@@ -68,18 +68,16 @@ void	execute_command(t_data *arg)
 {
 	arg->cmd = add_slash_to_path(arg);
 	if (!arg->cmd)
-		errors("Error\n \
-		--lors de la verification de la validité de la premiere commande--\n");
+		errors("ERROR: command not found");
 	execve(arg->cmd, arg->content, arg->env);
-	errors("ERROR EXECUTING COMMAND 1\n");
+	errors("ERROR: EXECUTING COMMAND 1\n");
 }
 
 void	execute_command_two(t_data *arg)
 {
 	arg->cmd2 = add_slash_to_path(arg);
 	if (!arg->cmd2)
-		errors("Error\n \
-		--lors de la verification de la validité de la deuxième commande--\n");
+		errors("ERROR: command not found");
 	execve(arg->cmd2, arg->content, arg->env);
 	errors("ERROR EXECUTING COMMAND 2\n");
 }
@@ -90,7 +88,7 @@ int	main(int ac, char **av, char **env)
 
 	arg = (t_data *)malloc(sizeof(t_data));
 	if (arg == NULL)
-		errors("ARG ALLOCATION\n");
+		errors("ERROR: arg allocation");
 	arg->env = env;
 	arg->cmd = av[2];
 	arg->cmd2 = av[3];
@@ -100,7 +98,7 @@ int	main(int ac, char **av, char **env)
 	}
 	else
 	{
-		perror("FAILURE\n");
+		errors("FAILURE");
 		exit(EXIT_FAILURE);
 	}
 	return (0);

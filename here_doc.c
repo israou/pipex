@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 01:03:52 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/17 23:48:55 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/17 21:53:07 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	here_doc(t_data *arg, int ac, char **av)
 	pid = fork();
 	if (pid == -1)
 		errors("fork failed");
-		printf("pid flewel %d\n", pid);
 	if (pid == 0)
 	{
 		close(fd[0]);

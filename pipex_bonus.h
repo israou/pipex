@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:03:21 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/17 18:39:56 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/21 02:59:32 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,5 +71,6 @@ void	fork_for_execute(t_data *arg, int ac, char **av);
 void	to_free(char **to_free);
 void	free_path(t_data *arg);
 void	all_redirections(int i, int *fd, char **av, t_data *arg);
+char	*check_absolute_path(t_data *arg);
 
 #endif

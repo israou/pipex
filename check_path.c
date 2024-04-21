@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/13 18:19:13 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/16 19:16:04 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/19 19:22:24 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ char	**whereis_paths(t_data *arg)
 			if (arg->path)
 				return (arg->path);
 			else
-				errors("ERROR\n find path\n");
+				errors("ERROR: Cannot find PATH variable or split PATH failed");
 		}
 		i++;
 	}
+	errors("ERROR: PATH variable not found in environment");
 	return (NULL);
 }
 
@@ -41,6 +42,8 @@ char	*add_slash_to_path(t_data *arg)
 	i = 0;
 	cmd_w_slash = NULL;
 	arg->path = whereis_paths(arg);
+	if (arg->content[0][0] == '/' || arg->content[0][0] == '.')
+		return (arg->content[0]);
 	while (arg->path[i])
 	{
 		tmp = ft_strjoin(arg->path[i], "/");

@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/26 00:08:58 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/17 20:29:38 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/21 03:13:58 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	all_redirections(int i, int *fd, char **av, t_data *arg)
 	else
 		redirect_input_for_firstcmd(arg, av);
 	if (pipe(fd) == -1)
-		errors("ERROR CREATION PIPE FAILED\n");
+		errors("ERROR: CREATION PIPE FAILED\n");
 	if (i != ac - 2)
 		redirect_output(fd);
 	else
@@ -72,7 +72,7 @@ void	execute_cmds(t_data *arg, int *fd)
 
 	pid = fork();
 	if (pid == -1)
-		errors("FORK FAILED\n");
+		errors("ERROR: FORK FAILED\n");
 	else if (pid == 0)
 	{
 		close(fd[0]);

@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/14 18:09:19 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/16 20:25:49 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/21 03:15:21 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,21 @@ char	**whereis_paths(t_data *arg)
 			if (arg->path)
 				return (arg->path);
 			else
-				errors("ERROR\n find path\n");
+				errors("ERROR: Cannot find PATH variable or split PATH failed");
 		}
 		i++;
+	}
+	errors("ERROR: PATH variable not found in environment");
+	return (NULL);
+}
+
+char	*check_absolute_path(t_data *arg)
+{
+	if (arg->content[0][0] == '/' || arg->content[0][0] == '.')
+	{
+		if (access(arg->content[0], F_OK | X_OK) == -1)
+			errors("error on thsi command");
+		return (ft_strdup(arg->content[0]));
 	}
 	return (NULL);
 }
@@ -37,10 +49,14 @@ char	*add_slash_to_path(t_data *arg)
 	int		i;
 	char	*tmp;
 	char	*cmd_w_slash;
+	char	*absolute_path;
 
 	i = 0;
 	cmd_w_slash = NULL;
 	arg->path = whereis_paths(arg);
+	absolute_path = check_absolute_path(arg);
+	if (absolute_path)
+		return (free_path(arg), absolute_path);
 	while (arg->path[i])
 	{
 		tmp = ft_strjoin(arg->path[i], "/");
@@ -49,10 +65,7 @@ char	*add_slash_to_path(t_data *arg)
 			cmd_w_slash = ft_strjoin(tmp, arg->content[0]);
 			free(tmp);
 			if (cmd_w_slash && access(cmd_w_slash, F_OK | X_OK) == 0)
-			{
-				free_path(arg);
-				return (cmd_w_slash);
-			}
+				return (free_path(arg), cmd_w_slash);
 			free(cmd_w_slash);
 		}
 		i++;
@@ -68,4 +81,5 @@ void	free_path(t_data *arg)
 	while (arg->path[j])
 		free(arg->path[j++]);
 	free(arg->path);
+	arg->path = NULL;
 }

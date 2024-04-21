@@ -6,7 +6,7 @@
 /*   By: ichaabi <ichaabi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 21:57:04 by ichaabi           #+#    #+#             */
-/*   Updated: 2024/04/16 19:27:10 by ichaabi          ###   ########.fr       */
+/*   Updated: 2024/04/19 19:01:33 by ichaabi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,7 @@ int	ft_strncmp(const char *s1, char *s2, unsigned int n)
 
 void	errors(char	*str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i])
-	{
-		write(2, &str[i], 1);
-		i++;
-	}
+	perror(str);
 	exit(EXIT_FAILURE);
 }
 
